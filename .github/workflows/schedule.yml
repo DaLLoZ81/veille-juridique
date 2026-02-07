@@ -19,8 +19,8 @@ jobs:
           PISTE_CLIENT_SECRET: ${{ secrets.PISTE_CLIENT_SECRET }}
           EMAIL_USER: ${{ secrets.EMAIL_USER }}
           EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
-        run: |
-          echo "--- RADIOGRAPHIE DU FICHIER ---"
+    run: |
+          echo "--- RADIOGRAPHIE : CONTENU DE BOT.PY ---"
           cat bot.py
-          echo "--- LANCEMENT DU PYTHON ---"
+          echo "--- FIN RADIOGRAPHIE ---"
           python bot.py
