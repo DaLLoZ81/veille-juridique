@@ -1,8 +1,6 @@
 name: Veille Hebdomadaire
 on:
-  schedule:
-    - cron: '0 8 * * 1' # Tous les lundis à 8h00 UTC
-  workflow_dispatch: # Permet de lancer le bot manuellement pour tester
+  workflow_dispatch: # On garde uniquement le bouton manuel pour nos tests
 
 jobs:
   run-bot:
@@ -21,4 +19,8 @@ jobs:
           PISTE_CLIENT_SECRET: ${{ secrets.PISTE_CLIENT_SECRET }}
           EMAIL_USER: ${{ secrets.EMAIL_USER }}
           EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
-          run: cat bot.py && python bot.py
+        run: |
+          echo "--- CONTENU DU FICHIER BOT.PY ---"
+          cat bot.py
+          echo "--- LANCEMENT DU PYTHON ---"
+          python bot.py
