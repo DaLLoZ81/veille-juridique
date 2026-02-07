@@ -15,3 +15,7 @@ else:
 
 print("--- FIN DU SCRIPT PYTHON ---")
 sys.stdout.flush()
+# --- CETTE PARTIE DÉCLENCHE LE BOT ---
+if __name__ == "__main__":
+    print("!!! LE DÉCLENCHEUR FONCTIONNE !!!")
+    # Ici nous remettrons vos fonctions de veille après
