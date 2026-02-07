@@ -1,6 +1,6 @@
 name: Veille Hebdomadaire
 on:
-  workflow_dispatch: # On garde uniquement le bouton manuel pour nos tests
+  workflow_dispatch:
 
 jobs:
   run-bot:
@@ -20,7 +20,7 @@ jobs:
           EMAIL_USER: ${{ secrets.EMAIL_USER }}
           EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
         run: |
-          echo "--- CONTENU DU FICHIER BOT.PY ---"
+          echo "--- RADIOGRAPHIE DU FICHIER ---"
           cat bot.py
           echo "--- LANCEMENT DU PYTHON ---"
           python bot.py
