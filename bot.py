@@ -3,24 +3,30 @@ import requests
 import smtplib
 from datetime import datetime, timedelta
 from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 
-# 1. RÉCUPÉRATION DES ACCÈS (DEPUIS LE COFFRE-FORT)
+# --- CONFIGURATION ---
 CLIENT_ID = os.getenv('PISTE_CLIENT_ID')
 CLIENT_SECRET = os.getenv('PISTE_CLIENT_SECRET')
+EMAIL_USER = os.getenv('EMAIL_USER')
+EMAIL_PASSWORD = os.getenv('EMAIL_PASSWORD')
 
-# 2. OBTENTION DU JETON (Le badge pour entrer sur Légifrance)
 def get_token():
     url = "https://oauth.piste.gouv.fr/api/oauth/token"
     payload = {'grant_type': 'client_credentials', 'client_id': CLIENT_ID, 'client_secret': CLIENT_SECRET, 'scope': 'openid'}
-    response = requests.post(url, data=payload)
-    return response.json().get('access_token')
+    res = requests.post(url, data=payload)
+    if res.status_code != 200:
+        print(f"ERREUR AUTHENTIFICATION : {res.status_code}")
+        print(res.text)
+        return None
+    return res.json().get('access_token')
 
-# 3. RECHERCHE DES TEXTES
-def chercher_textes(token, mot_cle, fond):
+def chercher_donnees(token, mot_cle, fond):
+    if not token:
+        return []
+    
     url = "https://api.piste.gouv.fr/dila/legifrance/lf-engine-app/search"
     headers = {'Authorization': f'Bearer {token}', 'Content-Type': 'application/json'}
-    
-    # On cherche sur les 7 derniers jours
     date_debut = (datetime.now() - timedelta(days=7)).strftime('%Y-%m-%d')
     
     payload = {
@@ -32,9 +38,25 @@ def chercher_textes(token, mot_cle, fond):
     }
     
     res = requests.post(url, headers=headers, json=payload)
-    return res.json().get('results', [])
+    
+    # C'est ici que nous vérifions si tout va bien
+    if res.status_code == 200:
+        return res.json().get('results', [])
+    else:
+        print(f"ERREUR LÉGIFRANCE ({fond}) : Code {res.status_code}")
+        print(f"Message du serveur : {res.text}")
+        return []
 
-# 4. EXECUTION ET ENVOI
+# --- EXECUTION ---
 token = get_token()
-resultats_hospitalier = chercher_textes(token, "fonction publique hospitalière", "JORF")
-# ... la logique d'envoi de mail suivra ici
+
+if token:
+    fph_decrets = chercher_donnees(token, "fonction publique hospitalière", "JORF")
+    juris_ce = chercher_donnees(token, "fonction publique", "CETAT")
+    juris_admin = chercher_donnees(token, "fonction publique hospitalière", "JURI")
+
+    # Si on a trouvé quelque chose, on prépare le mail (le reste du code est identique)
+    # ... [Code de mise en forme et d'envoi de mail] ...
+    print("Processus terminé. Vérifiez les logs ci-dessus en cas d'absence de mail.")
+else:
+    print("Impossible de continuer sans jeton d'accès.")
