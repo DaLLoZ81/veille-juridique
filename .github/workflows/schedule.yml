@@ -21,4 +21,4 @@ jobs:
           PISTE_CLIENT_SECRET: ${{ secrets.PISTE_CLIENT_SECRET }}
           EMAIL_USER: ${{ secrets.EMAIL_USER }}
           EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
-        run: cat bot.py && python bot.py
+          run: cat bot.py && python bot.py
