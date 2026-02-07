@@ -1,14 +1,9 @@
-import os
+import sys
 
-# Ce message DOIT apparaître après la ligne 14
-print("=== DÉBUT DU SCRIPT PYTHON ===")
+# On force l'écriture immédiate dans les logs
+print("--- TENTATIVE DE CONNEXION FORCEE ---", flush=True)
 
-# On vérifie si GitHub nous donne bien les clés
-email_test = os.getenv('EMAIL_USER')
-print(f"Connexion établie pour : {email_test}")
+# Cette ligne va volontairement créer une erreur pour nous parler
+raise Exception("LE BOT FONCTIONNE ET CECI EST UNE ERREUR VOLONTAIRE")
 
-# On simule une recherche pour tester l'affichage
-print("Recherche en cours dans le fonds JORF...")
-print("Résultat : 0 texte trouvé (Simulation)")
-
-print("=== FIN DU SCRIPT PYTHON ===")
+print("Cette ligne ne sera jamais lue", flush=True)
